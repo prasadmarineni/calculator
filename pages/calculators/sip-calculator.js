@@ -1,4 +1,4 @@
-export const config = { amp: 'hybrid' }
+// export const config = { amp: 'hybrid' }
 
 import Layout from "../../src/components/layout"
 import React from "react";
@@ -30,25 +30,40 @@ function SipCalculator() {
     function calculate() {
         console.log("calculate", pageData);
 
-        let investment = Number(pageData.investment);
+        let amount = Number(pageData.investment);
         let returnRate = Number(pageData.returnRate);
         let timePeriod = Number(pageData.timePeriod);
-
+        /*
         let rate = (returnRate/12);
         let months = (timePeriod*12);
 
         let r = Math.pow((1 + rate), months);
 
-        let futureValue = (investment * (r - 1) * (1 + rate));
+        let futureValue = (amount * (r - 1) * (1 + rate));
 
         let futureValue2 = futureValue / rate;
+        */
+
+        let monthlyRate = returnRate/100/12;
+        let months = timePeriod * 12;
+        let rate = Math.pow((1 + monthlyRate), months);
+        let futureValue = amount * (( rate - 1 ) * (1 + monthlyRate)) / monthlyRate;
+        futureValue = Math.round(futureValue);
+
+        //pageData.futureValue = futureValue;
+
+        setPageData({ ...pageData, ['futureValue'] : futureValue});
 
         debugger;
     }
 
     return (
         <Layout>
+
             <h2>SIP Calculator</h2>
+            <ul></ul>
+
+            <h3>Future Value: {pageData.futureValue}</h3>
 
             <form action="/" method="post" onSubmit={handleSubmit} >
 
